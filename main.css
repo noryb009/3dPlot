@@ -1,0 +1,27 @@
+#canvasWrap {
+	position: absolute;
+	left: 320px;
+	right: 0;
+}
+
+#info {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	height: 100%;
+	width: 320px;
+	width
+	float: left;
+	border-right: 1px solid black;
+	overflow-x: scroll;
+
+}
+
+#info div {
+	/*width: 320px;*/
+}
+
+input {
+	width: 80px;
+}

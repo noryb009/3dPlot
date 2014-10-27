@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>3d Plot</title>
+
+	<script type="text/html" id="colour-template">
+		<input type=color step=any data-bind="value: colour" />
+	</script>
+	<script type="text/html" id="pt-template">
+		<p>X, Y, Z:<br />
+		<input type=number data-bind="textInput: x" />
+		<input type=number data-bind="textInput: y" />
+		<input type=number data-bind="textInput: z" /></p>
+	</script>
+	<link rel="stylesheet" href="lib/normalize.css">
+	<link rel="stylesheet" href="main.css">
+</head>
+<body>
+	<div id='canvasWrap'></div>
+
+	<div id='info'>
+		<div>Points:</div>
+		<div id='points'>
+			<div data-bind="foreach: getType('point', '')">
+				<span data-bind="text: type"></span>
+				<p data-bind="template: { name: 'colour-template' }"></p>
+				<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+				<button data-bind="click: $root.remove">Delete</button>
+			</div>
+			<button data-bind="click: addPoint">Add</button>
+		</div>
+		<div>Lines:</div>
+		<div id='lines'>
+			<div data-bind="foreach: getType('line', '') ">
+				<p>Line:</p>
+				<p data-bind="template: { name: 'colour-template' }"></p>
+				<p>Position:</p>
+				<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+				<p>Direction:</p>
+				<div data-bind="template: { name: 'pt-template', data: pts.d }"></div>
+				<button data-bind="click: $root.remove">Delete</button>
+			</div>
+			<button data-bind="click: addLine">Add</button>
+		</div>
+
+		<div id='planes'>
+			<div>Planes:</div>
+			<div data-bind="foreach: getType('plane', '') ">
+				<p>Plane:</p>
+				<p data-bind="template: { name: 'colour-template' }"></p>
+				<p>Point:</p>
+				<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+				<p>Normal:</p>
+				<div data-bind="template: { name: 'pt-template', data: pts.n }"></div>
+				<button data-bind="click: $root.remove">Delete</button>
+			</div>
+			<button data-bind="click: addPlane">Add</button>
+		</div>
+	</div>
+	<script src="lib/knockout-3.2.0.js"></script>
+	<script src="lib/three.min.js"></script>
+	<script src="lib/OrbitControls.js"></script>
+	<script src="lib/tinycolor.js"></script>
+	<script src="utils.js"></script>
+	<script src="drawable.js"></script>
+	<script src="main.js"></script>
+</body>
+</html>
