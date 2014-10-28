@@ -18,8 +18,24 @@
 
 }
 
-#info div {
-	/*width: 320px;*/
+#info p {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.category {
+	margin-top: 4px;
+	padding-top: 4px;
+	border-top: 1px solid black;
+}
+
+.item {
+	margin-top: 4px;
+	padding-top: 4px;
+	border-top: 1px solid #888;
+	padding-bottom: 16px;
+
+	padding-left: 15px;
 }
 
 input {

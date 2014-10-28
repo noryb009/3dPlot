@@ -4,13 +4,12 @@
 	<title>3d Plot</title>
 
 	<script type="text/html" id="colour-template">
-		<input type=color step=any data-bind="value: colour" />
+		<input type=color step=any data-bind="value: colour" placeholder="Colour" />
 	</script>
 	<script type="text/html" id="pt-template">
-		<p>X, Y, Z:<br />
-		<input type=number data-bind="textInput: x" />
-		<input type=number data-bind="textInput: y" />
-		<input type=number data-bind="textInput: z" /></p>
+		<input type=number data-bind="textInput: x" placeholder="X" />
+		<input type=number data-bind="textInput: y" placeholder="Y" />
+		<input type=number data-bind="textInput: z" placeholder="Z" />
 	</script>
 	<link rel="stylesheet" href="lib/normalize.css">
 	<link rel="stylesheet" href="main.css">
@@ -19,42 +18,42 @@
 	<div id='canvasWrap'></div>
 
 	<div id='info'>
-		<div>Points:</div>
-		<div id='points'>
-			<div data-bind="foreach: getType('point', '')">
-				<span data-bind="text: type"></span>
-				<p data-bind="template: { name: 'colour-template' }"></p>
-				<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
-				<button data-bind="click: $root.remove">Delete</button>
-			</div>
-			<button data-bind="click: addPoint">Add</button>
+		<div>Add
+		<button data-bind="click: addPoint">Point</button>
+		<button data-bind="click: addLine">Line</button>
+		<button data-bind="click: addPlane">Plane</button>
 		</div>
-		<div>Lines:</div>
-		<div id='lines'>
-			<div data-bind="foreach: getType('line', '') ">
-				<p>Line:</p>
-				<p data-bind="template: { name: 'colour-template' }"></p>
+		<div class="category">Points:</div>
+		<div id='points' data-bind="foreach: getType('point', '')">
+			<div class="item point">
+				<p>Point: <span data-bind="click: $root.remove">(X)</span></p>
+				<div data-bind="template: { name: 'colour-template' }"></div>
+				<p>Position:</p>
+				<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+			</div>
+		</div>
+		<div class="category">Lines:</div>
+		<div id='lines' data-bind="foreach: getType('line', '') ">
+			<div class="item line">
+				<p>Line: <span data-bind="click: $root.remove">(X)</span></p>
+				<div data-bind="template: { name: 'colour-template' }"></div>
 				<p>Position:</p>
 				<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
 				<p>Direction:</p>
 				<div data-bind="template: { name: 'pt-template', data: pts.d }"></div>
-				<button data-bind="click: $root.remove">Delete</button>
 			</div>
-			<button data-bind="click: addLine">Add</button>
 		</div>
 
-		<div id='planes'>
-			<div>Planes:</div>
-			<div data-bind="foreach: getType('plane', '') ">
-				<p>Plane:</p>
-				<p data-bind="template: { name: 'colour-template' }"></p>
+		<div class="category">Planes:</div>
+		<div id='planes' data-bind="foreach: getType('plane', '') ">
+			<div class="item plane">
+				<p>Plane: <span data-bind="click: $root.remove">(X)</span></p>
+				<div data-bind="template: { name: 'colour-template' }"></div>
 				<p>Point:</p>
 				<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
 				<p>Normal:</p>
 				<div data-bind="template: { name: 'pt-template', data: pts.n }"></div>
-				<button data-bind="click: $root.remove">Delete</button>
 			</div>
-			<button data-bind="click: addPlane">Add</button>
 		</div>
 	</div>
 	<script src="lib/knockout-3.2.0.js"></script>
