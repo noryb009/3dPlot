@@ -46,6 +46,17 @@
 		<div data-bind="template: { name: 'colour-template' }"></div>
 		<p>Point:</p>
 		<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+		<p>Direction 1:</p>
+		<div data-bind="template: { name: 'pt-template', data: pts.d1 }"></div>
+		<p>Direction 2:</p>
+		<div data-bind="template: { name: 'pt-template', data: pts.d2 }"></div>
+
+	</script>
+
+	<script type="text/html" id="item-template-plane-normal">
+		<div data-bind="template: { name: 'colour-template' }"></div>
+		<p>Point:</p>
+		<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
 		<p>Normal:</p>
 		<div data-bind="template: { name: 'pt-template', data: pts.n }"></div>
 	</script>
@@ -61,7 +72,8 @@
 			<button data-bind="click: addPoint">Point</button>
 			<button data-bind="click: function() {addLine('')}">Line</button>
 			<button data-bind="click: function() {addLine('parametric')}">Parametric Line</button>
-			<button data-bind="click: addPlane">Plane</button>
+			<button data-bind="click: function() {addPlane('')}">Plane</button>
+			<button data-bind="click: function() {addPlane('normal')}">Plane by Normal</button>
 		</div>
 		<div id='items' data-bind="foreach: items">
 			<div class='item-meta'>

@@ -102,15 +102,26 @@ function drawableModel(type, subtype, pts) {
 	};
 
 	self.makePlane = function() {
-		if(self.pts.n.v().length() === 0)
-			return;
+		var normal;
+		if(self.subtype() === 'normal') {
+			if(self.pts.n.v().length() === 0)
+				return;
+			normal = self.pts.n.v();
+		} else {
+			if(self.pts.d1.v().length() === 0 ||
+			   self.pts.d2.v().length() === 0)
+				return;
+			normal = self.pts.d1.v().clone().cross(self.pts.d2.v());
+			if(normal.length() === 0)
+				return;
+		}
 
 		self.geo = new THREE.PlaneGeometry(PLANE_SIZE, PLANE_SIZE);
 		self.mesh = new THREE.Mesh(
 			self.geo, self.mat());
 		self.mesh.position.copy(self.pts.p.v());
 		self.mesh.lookAt(self.pts.p.v().clone()
-			.add(self.pts.n.v()));
+			.add(normal));
 	};
 
 	self.valid = ko.pureComputed(function() {
@@ -159,13 +170,12 @@ function drawableModel(type, subtype, pts) {
 			case 'point':
 				return t+'point';
 			case 'line':
-				switch(self.subtype()) {
-					case 'parametric':
-						return t+'line-parametric';
-					default:
-						return t+'line';
-				}
+				if(self.subtype() === 'parametric')
+					return t+'line-parametric';
+				return t+'line';
 			case 'plane':
+				if(self.subtype() === 'normal')
+					return t+'plane-normal';
 				return t+'plane';
 		}
 	});
@@ -190,12 +200,20 @@ function drawableModels(){
 		}));
 	};
 
-	self.addPlane = function() {
-		self.items.push(new drawableModel('plane', '',
-		{
-			p: new Vec(),
-			n: new Vec(true)
-		}));
+	self.addPlane = function(subtype) {
+		var pts;
+		if(subtype === 'normal')
+			pts = {
+				p: new Vec(),
+				n: new Vec()
+			};
+		else
+			pts = {
+				p: new Vec(),
+				d1: new Vec(),
+				d2: new Vec()
+			};
+		self.items.push(new drawableModel('plane', subtype, pts));
 	};
 
 	self.remove = function(item) {
