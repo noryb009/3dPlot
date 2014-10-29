@@ -6,10 +6,13 @@
 	<script type="text/html" id="colour-template">
 		<input type=color step=any data-bind="value: colour" placeholder="Colour" />
 	</script>
+	<script type="text/html" id="num-template">
+		<input type=number data-bind="textInput: $data[0]" />
+	</script>
 	<script type="text/html" id="pt-template">
-		<input type=number data-bind="textInput: x" placeholder="X" />
-		<input type=number data-bind="textInput: y" placeholder="Y" />
-		<input type=number data-bind="textInput: z" placeholder="Z" />
+		<span data-bind="template: {name: 'num-template', data: [x]}"></span>
+		<span data-bind="template: {name: 'num-template', data: [y]}"></span>
+		<span data-bind="template: {name: 'num-template', data: [z]}"></span>
 	</script>
 
 	<script type="text/html" id="item-template-point">
@@ -20,10 +23,23 @@
 
 	<script type="text/html" id="item-template-line">
 		<div data-bind="template: { name: 'colour-template' }"></div>
-		<p>Position:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
-		<p>Direction:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.d }"></div>
+		<p>(x,y,z) = <br />
+		<span data-bind="template: { name: 'pt-template', data: pts.p }"></span></p>
+		<p>+t<br />
+		<span data-bind="template: { name: 'pt-template', data: pts.d }"></span></p>
+	</script>
+
+	<script type="text/html" id="item-template-line-parametric">
+		<div data-bind="template: { name: 'colour-template' }"></div>
+		<p>x=<span data-bind="template: {name: 'num-template', data: [pts.p.x]}"></span>
+		+t<span data-bind="template: {name: 'num-template', data: [pts.d.x]}"></span>
+		</p>
+		<p>y=<span data-bind="template: {name: 'num-template', data: [pts.p.y]}"></span>
+		+t<span data-bind="template: {name: 'num-template', data: [pts.d.y]}"></span>
+		</p>
+		<p>z=<span data-bind="template: {name: 'num-template', data: [pts.p.z]}"></span>
+		+t<span data-bind="template: {name: 'num-template', data: [pts.d.z]}"></span>
+		</p>
 	</script>
 
 	<script type="text/html" id="item-template-plane">
@@ -43,7 +59,8 @@
 	<div id='info'>
 		<div>Add
 			<button data-bind="click: addPoint">Point</button>
-			<button data-bind="click: addLine">Line</button>
+			<button data-bind="click: function() {addLine('')}">Line</button>
+			<button data-bind="click: function() {addLine('parametric')}">Parametric Line</button>
 			<button data-bind="click: addPlane">Plane</button>
 		</div>
 		<div id='items' data-bind="foreach: items">

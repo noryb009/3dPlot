@@ -159,7 +159,12 @@ function drawableModel(type, subtype, pts) {
 			case 'point':
 				return t+'point';
 			case 'line':
-				return t+'line';
+				switch(self.subtype()) {
+					case 'parametric':
+						return t+'line-parametric';
+					default:
+						return t+'line';
+				}
 			case 'plane':
 				return t+'plane';
 		}
@@ -177,8 +182,8 @@ function drawableModels(){
 		}));
 	};
 
-	self.addLine = function() {
-		self.items.push(new drawableModel('line', '',
+	self.addLine = function(subtype) {
+		self.items.push(new drawableModel('line', subtype,
 		{
 			p: new Vec(),
 			d: new Vec(true)
