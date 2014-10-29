@@ -19,9 +19,9 @@ ThreeJSUtils.prototype.init = function() {
 
 	this.scene = new THREE.Scene();
 	this.camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 1000);
-	this.camera.position.x = 5;
-	this.camera.position.y = 5;
-	this.camera.position.z = 5;
+	this.camera.position.x = 3;
+	this.camera.position.y = 3;
+	this.camera.position.z = 10;
 
 	if(ALLOW_WEBGL === true && window.WebGLRenderingContext)
 		this.renderer = new THREE.WebGLRenderer();
