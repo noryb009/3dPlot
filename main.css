@@ -2,6 +2,8 @@
 	position: absolute;
 	left: 320px;
 	right: 0;
+	overflow: hidden;
+	height: 100%;
 }
 
 #info {
@@ -11,11 +13,9 @@
 	bottom: 0;
 	height: 100%;
 	width: 320px;
-	width
 	float: left;
 	border-right: 1px solid black;
-	overflow-x: scroll;
-
+	overflow-y: auto;
 }
 
 #info p {
@@ -32,10 +32,15 @@
 .item {
 	margin-top: 4px;
 	padding-top: 4px;
-	border-top: 1px solid #888;
-	padding-bottom: 16px;
+	border-bottom: 1px solid #888;
+	padding-bottom: 8px;
+	margin-bottom: 8px;
 
-	padding-left: 15px;
+	padding-left: 25px;
+}
+
+.item:last-child {
+	border-bottom-width: 0;
 }
 
 input {

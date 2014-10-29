@@ -147,21 +147,28 @@ function drawableModel(type, subtype, pts) {
 	self.remove = function() {
 		u.removeMesh(self.mesh);
 	}
+
+	self.prettyType = ko.pureComputed(function() {
+		return self.type().charAt(0).toUpperCase()
+			+ self.type().substring(1);
+	});
+
+	self.itemTemplate = ko.pureComputed(function() {
+		var t = 'item-template-';
+		switch(self.type()) {
+			case 'point':
+				return t+'point';
+			case 'line':
+				return t+'line';
+			case 'plane':
+				return t+'plane';
+		}
+	});
 }	
 
 function drawableModels(){
 	var self = this;
 	self.items = ko.observableArray();
-
-	self.filterByType = function(arr, type, subtype) {
-		return ko.utils.arrayFilter(arr,
-			function(val) {
-				return val.type() === type &&
-					(subtype === null ||
-					 val.subtype() === subtype);
-			}
-		);
-	}
 
 	self.addPoint = function() {
 		self.items.push(new drawableModel('point', '',
@@ -184,10 +191,6 @@ function drawableModels(){
 			p: new Vec(),
 			n: new Vec(true)
 		}));
-	};
-
-	self.getType = function(type, subtype) {
-		return self.filterByType(self.items(), type, subtype);
 	};
 
 	self.remove = function(item) {
