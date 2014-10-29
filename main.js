@@ -35,7 +35,12 @@ window.onload = function() {
 
 	var axisGeo = new THREE.Geometry();
 	axisGeo.vertices = axisPositions();
-	var axisMat = new THREE.LineBasicMaterial({color: 0xffffff});
+	var axisMat = new THREE.LineBasicMaterial({
+		color: 0xffffff,
+		transparent: true,
+		opacity: 0.5,
+		depthWrite: false
+	});
 	var axisMesh = new THREE.Line(axisGeo, axisMat, THREE.LinePieces);
 
 	u.addMesh(axisMesh);
