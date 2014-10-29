@@ -1,4 +1,5 @@
 var ThreeJSUtils = function() {
+	"use strict";
 	this.scene = null;
 	this.camera = null;
 	this.renderer = null;
@@ -7,10 +8,12 @@ var ThreeJSUtils = function() {
 };
 
 ThreeJSUtils.prototype.getElement = function() {
+	"use strict";
 	return document.getElementById('canvasWrap');
 };
 
 ThreeJSUtils.prototype.init = function() {
+	"use strict";
 	var w = this.getElement().offsetWidth;
 	var h = window.innerHeight;
 
@@ -37,6 +40,7 @@ ThreeJSUtils.prototype.init = function() {
 };
 
 var onWinResize = function() {
+	"use strict";
 	var w = u.getElement().offsetWidth;
 	var h = window.innerHeight;
 
@@ -49,11 +53,13 @@ var onWinResize = function() {
 };
 
 var forceRender = function() {
+	"use strict";
 	u.renderFlag = false;
 	u.renderer.render(u.scene, u.camera);
 };
 
 ThreeJSUtils.prototype.render = function() {
+	"use strict";
 	if(this.renderFlag)
 		return;
 	this.renderFlag = true;
@@ -61,6 +67,7 @@ ThreeJSUtils.prototype.render = function() {
 };
 
 ThreeJSUtils.prototype.addMesh = function(m) {
+	"use strict";
 	if(m !== null && m !== undefined) {
 		this.scene.add(m);
 		this.render();
@@ -68,10 +75,65 @@ ThreeJSUtils.prototype.addMesh = function(m) {
 };
 
 ThreeJSUtils.prototype.removeMesh = function(m) {
+	"use strict";
 	if(m !== null && m !== undefined) {
 		this.scene.remove(m);
 		this.render();
 	}
 };
 
+ThreeJSUtils.prototype.axisPositions = function() {
+	"use strict";
+	var posns = [
+		[new THREE.Vector3(-AXIS_SIZE, 0, 0),
+		 new THREE.Vector3( AXIS_SIZE, 0, 0),],
+		[new THREE.Vector3(0, -AXIS_SIZE, 0),
+		 new THREE.Vector3(0,  AXIS_SIZE, 0),],
+		[new THREE.Vector3(0, 0, -AXIS_SIZE),
+		 new THREE.Vector3(0, 0,  AXIS_SIZE),],
+	];
+
+	for(var i = -AXIS_SIZE; i <= AXIS_SIZE; i += AXIS_TICK_SPACING) {
+		if(i === 0) continue;
+		posns[0].push(
+			new THREE.Vector3(i, 0, -AXIS_TICK_SIZE),
+			new THREE.Vector3(i, 0,  AXIS_TICK_SIZE)
+		);
+		posns[1].push(
+			new THREE.Vector3(-AXIS_TICK_SIZE, i, 0),
+			new THREE.Vector3( AXIS_TICK_SIZE, i, 0)
+		);
+		posns[2].push(
+			new THREE.Vector3(-AXIS_TICK_SIZE, 0, i),
+			new THREE.Vector3( AXIS_TICK_SIZE, 0, i)
+		);
+	}
+	return posns;
+};
+
+
+ThreeJSUtils.prototype.addAxis = function() {
+	"use strict";
+	var axisGeo = [new THREE.Geometry(), new THREE.Geometry(), new THREE.Geometry()];
+	var posns = this.axisPositions();
+	axisGeo[0].vertices = posns[0];
+	axisGeo[1].vertices = posns[1];
+	axisGeo[2].vertices = posns[2];
+	var xMat = new THREE.LineBasicMaterial({
+		color: 0xff0000,
+		transparent: true,
+		opacity: 0.5,
+		depthWrite: false
+	});
+	var yMat = xMat.clone();
+	var zMat = xMat.clone();
+	yMat.setValues({color: 0x00ff00});
+	zMat.setValues({color: 0x0000ff});
+
+	this.addMesh(new THREE.Line(axisGeo[0], xMat, THREE.LinePieces));
+	this.addMesh(new THREE.Line(axisGeo[1], yMat, THREE.LinePieces));
+	this.addMesh(new THREE.Line(axisGeo[2], zMat, THREE.LinePieces));
+};
+
 var u = new ThreeJSUtils();
+
