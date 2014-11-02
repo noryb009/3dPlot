@@ -44,6 +44,7 @@ function Vec(normalized) {
 function drawableModel(type, subtype, pts) {
 	var self = this;
 
+	self.collapse = ko.observable(false);
 	self.type = ko.observable(type);
 	self.subtype = ko.observable(subtype);
 	self.colour = ko.observable(randomColour());
@@ -51,6 +52,10 @@ function drawableModel(type, subtype, pts) {
 
 	self.geo = null;
 	self.mesh = null;
+	
+	self.toggleCollapse = function() {
+		self.collapse(!self.collapse());
+	};
 
 	self.mat = ko.pureComputed(function() {
 		switch(self.type()) {
@@ -214,6 +219,27 @@ function drawableModels(){
 				d2: new Vec()
 			};
 		self.items.push(new drawableModel('plane', subtype, pts));
+	};
+	self.addObject = function() {
+		var element = document.getElementById('add-select');
+		switch(element.value) {
+			case 'pt':
+				self.addPoint();
+				break;
+			case 'line':
+				self.addLine('');
+				break;
+			case 'line-para':
+				self.addLine('parametric');
+				break;
+			case 'plane':
+				self.addPlane('');
+				break;
+			case 'plane-normal':
+				self.addPlane('normal');
+				break;
+		}
+		element.value = '';
 	};
 
 	self.remove = function(item) {

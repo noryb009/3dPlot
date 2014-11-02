@@ -1,12 +1,12 @@
-#canvasWrap {
+.canvasWrap {
 	position: absolute;
-	left: 320px;
+	left: 321px;
 	right: 0;
 	overflow: hidden;
 	height: 100%;
 }
 
-#info {
+.info {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -15,10 +15,15 @@
 	width: 320px;
 	float: left;
 	border-right: 1px solid black;
+	overflow: hidden;
+}
+
+.items {
+	height: 100%;
 	overflow-y: auto;
 }
 
-#info p {
+.items p {
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
@@ -41,6 +46,13 @@
 
 .item:last-child {
 	border-bottom-width: 0;
+}
+
+.colour-box {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border: 1px solid black;
 }
 
 input {

@@ -1,86 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>3d Plot</title>
 
+	<link rel="stylesheet" href="lib/normalize.css">
+	<link rel="stylesheet" href="main.css">
+
 	<script type="text/html" id="colour-template">
-		<input type=color step=any data-bind="value: colour" placeholder="Colour" />
+		<input type=color data-bind="value: colour" placeholder="Colour" />
 	</script>
 	<script type="text/html" id="num-template">
-		<input type=number data-bind="textInput: $data[0]" />
+		<input type=number step=any data-bind="textInput: $data[0]" />
 	</script>
 	<script type="text/html" id="pt-template">
 		<span data-bind="template: {name: 'num-template', data: [x]}"></span>
 		<span data-bind="template: {name: 'num-template', data: [y]}"></span>
 		<span data-bind="template: {name: 'num-template', data: [z]}"></span>
 	</script>
+	<script type="text/html" id="pt-template-summary">
+		(<span data-bind="text: x"></span>,
+		<span data-bind="text: y"></span>,
+		<span data-bind="text: z"></span>)
+	</script>
 
 	<script type="text/html" id="item-template-point">
-		<div data-bind="template: { name: 'colour-template' }"></div>
-		<p>Position:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+		<div data-bind="if: collapse">
+			<span data-bind="template: { name: 'pt-template-summary', data: pts.p }"></span>
+		</div>
+		<div data-bind="ifnot: collapse">
+			<p>Position:</p>
+			<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+		</div>
 	</script>
 
 	<script type="text/html" id="item-template-line">
-		<div data-bind="template: { name: 'colour-template' }"></div>
-		<p>(x,y,z) = <br />
-		<span data-bind="template: { name: 'pt-template', data: pts.p }"></span></p>
-		<p>+t<br />
-		<span data-bind="template: { name: 'pt-template', data: pts.d }"></span></p>
+		<div data-bind="ifnot: collapse">
+			<p>(x,y,z) = <br />
+			<span data-bind="template: { name: 'pt-template', data: pts.p }"></span></p>
+			<p>+t<br />
+			<span data-bind="template: { name: 'pt-template', data: pts.d }"></span></p>
+		</div>
+		<div data-bind="if: collapse">
+			(x,y,z) =
+			<span data-bind="template: { name: 'pt-template-summary', data: pts.p }"></span>
+			+t
+			<span data-bind="template: { name: 'pt-template-summary', data: pts.d }"></span>
+		</div>
 	</script>
 
 	<script type="text/html" id="item-template-line-parametric">
-		<div data-bind="template: { name: 'colour-template' }"></div>
-		<p>x=<span data-bind="template: {name: 'num-template', data: [pts.p.x]}"></span>
-		+t<span data-bind="template: {name: 'num-template', data: [pts.d.x]}"></span>
-		</p>
-		<p>y=<span data-bind="template: {name: 'num-template', data: [pts.p.y]}"></span>
-		+t<span data-bind="template: {name: 'num-template', data: [pts.d.y]}"></span>
-		</p>
-		<p>z=<span data-bind="template: {name: 'num-template', data: [pts.p.z]}"></span>
-		+t<span data-bind="template: {name: 'num-template', data: [pts.d.z]}"></span>
-		</p>
+		<div data-bind="ifnot: collapse">
+			<p>x=<span data-bind="template: {name: 'num-template', data: [pts.p.x]}"></span>
+			+t<span data-bind="template: {name: 'num-template', data: [pts.d.x]}"></span>
+			</p>
+			<p>y=<span data-bind="template: {name: 'num-template', data: [pts.p.y]}"></span>
+			+t<span data-bind="template: {name: 'num-template', data: [pts.d.y]}"></span>
+			</p>
+			<p>z=<span data-bind="template: {name: 'num-template', data: [pts.p.z]}"></span>
+			+t<span data-bind="template: {name: 'num-template', data: [pts.d.z]}"></span>
+			</p>
+		</div>
+		<div data-bind="if: collapse">
+			x = <span data-bind="text: pts.p.x"></span> + <span data-bind="text: pts.d.x"></span>t;
+			y = <span data-bind="text: pts.p.y"></span> + <span data-bind="text: pts.d.y"></span>t;
+			z = <span data-bind="text: pts.p.z"></span> + <span data-bind="text: pts.d.z"></span>t
+		</div>
 	</script>
 
 	<script type="text/html" id="item-template-plane">
-		<div data-bind="template: { name: 'colour-template' }"></div>
-		<p>Point:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
-		<p>Direction 1:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.d1 }"></div>
-		<p>Direction 2:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.d2 }"></div>
-
+		<div data-bind="ifnot: collapse">
+			<p>Point:</p>
+			<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+			<p>Direction 1:</p>
+			<div data-bind="template: { name: 'pt-template', data: pts.d1 }"></div>
+			<p>Direction 2:</p>
+			<div data-bind="template: { name: 'pt-template', data: pts.d2 }"></div>
+		</div>
+		<div data-bind="if: collapse">
+			r =
+			<span data-bind="template: {name: 'pt-template-summary', data: pts.p}"></span> +
+			s<span data-bind="template: {name: 'pt-template-summary', data: pts.d1}"></span> +
+			t<span data-bind="template: {name: 'pt-template-summary', data: pts.d2}"></span>
+		</div>
 	</script>
 
 	<script type="text/html" id="item-template-plane-normal">
-		<div data-bind="template: { name: 'colour-template' }"></div>
-		<p>Point:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
-		<p>Normal:</p>
-		<div data-bind="template: { name: 'pt-template', data: pts.n }"></div>
+		<div data-bind="ifnot: collapse">
+			<p>Point:</p>
+			<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
+			<p>Normal:</p>
+			<div data-bind="template: { name: 'pt-template', data: pts.n }"></div>
+		</div>
+		<div data-bind="if: collapse">
+			<span data-bind="template: {name: 'pt-template-summary', data: pts.n}"></span> &middot;
+			(<span data-bind="template: {name: 'pt-template-summary', data: pts.p}"></span> - x ) = 0
+		</div>
 	</script>
-
-	<link rel="stylesheet" href="lib/normalize.css">
-	<link rel="stylesheet" href="main.css">
 </head>
 <body>
-	<div id='canvasWrap'></div>
+	<div id='canvasWrap' class='canvasWrap'></div>
 
-	<div id='info'>
-		<div>Add
-			<button data-bind="click: addPoint">Point</button>
-			<button data-bind="click: function() {addLine('')}">Line</button>
-			<button data-bind="click: function() {addLine('parametric')}">Parametric Line</button>
-			<button data-bind="click: function() {addPlane('')}">Plane</button>
-			<button data-bind="click: function() {addPlane('normal')}">Plane by Normal</button>
+	<div class='info'>
+		<div class='add-bar'>
+			<select id='add-select' data-bind="event: {change: addObject}">
+				<option value="" selected style="display: none">Add</option>
+				<option value="pt">Point</option>
+				<option value="line">Line</option>
+				<option value="line-para">Line (Parametric)</option>
+				<option value="plane">Plane</option>
+				<option value="plane-normal">Plane (Normal)</option>
+			</select>
 		</div>
-		<div id='items' data-bind="foreach: items">
+		<div class='items' data-bind="foreach: items">
 			<div class='item-meta'>
-				<span data-bind="text: prettyType"></span>
-				<span data-bind="click: $root.remove">(X)</span>
+				<span data-bind="text: prettyType, click: toggleCollapse"></span>
+				<span data-bind="ifnot: collapse, click: $root.remove">(X)</span>
+				<span data-bind="if: collapse">
+					<span class='colour-box' data-bind="if: collapse, style: {backgroundColor: colour}"></span>
+				</span>
 			</div>
-			<div class='item' data-bind="template: {name: itemTemplate}"></div>
+			<div class='item'>
+				<div data-bind="ifnot: collapse">
+					<span data-bind="template: {name: 'colour-template'}"></span>
+				</div>
+				<div data-bind="template: {name: itemTemplate}"></div>
+			</div>
 		</div>
 	</div>
 	<script src="lib/knockout-3.2.0.js"></script>
