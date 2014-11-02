@@ -23,6 +23,9 @@
 		<span data-bind="text: y"></span>,
 		<span data-bind="text: z"></span>)
 	</script>
+	<script type="text/html" id="size-template">
+		<input type=range min=0 max=20 step=1 data-bind="textInput: size" />
+	</script>
 
 	<script type="text/html" id="item-template-point">
 		<div data-bind="if: collapse">
@@ -40,6 +43,7 @@
 			<span data-bind="template: { name: 'pt-template', data: pts.p }"></span></p>
 			<p>+t<br />
 			<span data-bind="template: { name: 'pt-template', data: pts.d }"></span></p>
+			<p>Size: <span data-bind="template: {name: 'size-template'}"></span></p>
 		</div>
 		<div data-bind="if: collapse">
 			(x,y,z) =
@@ -60,6 +64,7 @@
 			<p>z=<span data-bind="template: {name: 'num-template', data: [pts.p.z]}"></span>
 			+t<span data-bind="template: {name: 'num-template', data: [pts.d.z]}"></span>
 			</p>
+			<p>Size: <span data-bind="template: {name: 'size-template'}"></span></p>
 		</div>
 		<div data-bind="if: collapse">
 			x = <span data-bind="text: pts.p.x"></span> + <span data-bind="text: pts.d.x"></span>t;
@@ -76,6 +81,7 @@
 			<div data-bind="template: { name: 'pt-template', data: pts.d1 }"></div>
 			<p>Direction 2:</p>
 			<div data-bind="template: { name: 'pt-template', data: pts.d2 }"></div>
+			<p>Size: <span data-bind="template: {name: 'size-template'}"></span></p>
 		</div>
 		<div data-bind="if: collapse">
 			r =
@@ -91,6 +97,7 @@
 			<div data-bind="template: { name: 'pt-template', data: pts.p }"></div>
 			<p>Normal:</p>
 			<div data-bind="template: { name: 'pt-template', data: pts.n }"></div>
+			<p>Size: <span data-bind="template: {name: 'size-template'}"></span></p>
 		</div>
 		<div data-bind="if: collapse">
 			<span data-bind="template: {name: 'pt-template-summary', data: pts.n}"></span> &middot;

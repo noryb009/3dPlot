@@ -58,3 +58,7 @@
 input {
 	width: 60px;
 }
+
+input[type="range"] {
+	width: 150px;
+}

@@ -1,6 +1,6 @@
 var PT_SIZE = 0.25;
 var LINE_SIZE = 5;
-var PLANE_SIZE = 10;
+var PLANE_SIZE = 5;
 
 var randomColour = (function() {
 	var n = 0;
@@ -41,12 +41,13 @@ function Vec(normalized) {
 	});
 }
 
-function drawableModel(type, subtype, pts) {
+function drawableModel(type, subtype, size, pts) {
 	var self = this;
 
 	self.collapse = ko.observable(false);
 	self.type = ko.observable(type);
 	self.subtype = ko.observable(subtype);
+	self.size = ko.observable(size);
 	self.colour = ko.observable(randomColour());
 	self.pts = pts;
 
@@ -75,12 +76,12 @@ function drawableModel(type, subtype, pts) {
 	});
 
 	self.linesAcrossPoint = function(v) {
-		return [v.clone().setX(v.x-PT_SIZE),
-			v.clone().setX(v.x+PT_SIZE),
-			v.clone().setY(v.y-PT_SIZE),
-			v.clone().setY(v.y+PT_SIZE),
-			v.clone().setZ(v.z-PT_SIZE),
-			v.clone().setZ(v.z+PT_SIZE)];
+		return [v.clone().setX(v.x-self.size()),
+			v.clone().setX(v.x+self.size()),
+			v.clone().setY(v.y-self.size()),
+			v.clone().setY(v.y+self.size()),
+			v.clone().setZ(v.z-self.size()),
+			v.clone().setZ(v.z+self.size())];
 	}
 
 	self.makePoint = function() {
@@ -98,9 +99,9 @@ function drawableModel(type, subtype, pts) {
 		self.geo = new THREE.Geometry();
 		self.geo.vertices.push(
 			self.pts.d.v().clone().negate()
-				.multiplyScalar(LINE_SIZE).add(self.pts.p.v()),
+				.multiplyScalar(self.size()).add(self.pts.p.v()),
 			self.pts.d.v().clone()
-				.multiplyScalar(LINE_SIZE).add(self.pts.p.v())
+				.multiplyScalar(self.size()).add(self.pts.p.v())
 		);
 
 		self.mesh = new THREE.Line(self.geo, self.mat());
@@ -121,7 +122,7 @@ function drawableModel(type, subtype, pts) {
 				return;
 		}
 
-		self.geo = new THREE.PlaneGeometry(PLANE_SIZE, PLANE_SIZE);
+		self.geo = new THREE.PlaneGeometry(self.size() * 2, self.size() * 2);
 		self.mesh = new THREE.Mesh(
 			self.geo, self.mat());
 		self.mesh.position.copy(self.pts.p.v());
@@ -191,14 +192,14 @@ function drawableModels(){
 	self.items = ko.observableArray();
 
 	self.addPoint = function() {
-		self.items.push(new drawableModel('point', '',
+		self.items.push(new drawableModel('point', '', PT_SIZE,
 		{
 			p: new Vec()
 		}));
 	};
 
 	self.addLine = function(subtype) {
-		self.items.push(new drawableModel('line', subtype,
+		self.items.push(new drawableModel('line', subtype, LINE_SIZE,
 		{
 			p: new Vec(),
 			d: new Vec(true)
@@ -218,7 +219,7 @@ function drawableModels(){
 				d1: new Vec(),
 				d2: new Vec()
 			};
-		self.items.push(new drawableModel('plane', subtype, pts));
+		self.items.push(new drawableModel('plane', subtype, PLANE_SIZE, pts));
 	};
 	self.addObject = function() {
 		var element = document.getElementById('add-select');
