@@ -23,10 +23,13 @@ ThreeJSUtils.prototype.init = function() {
 	this.camera.position.y = 3;
 	this.camera.position.z = 10;
 
-	if(ALLOW_WEBGL === true && window.WebGLRenderingContext)
+	try {
+		if(ALLOW_WEBGL === false || !window.WebGLRenderingContext)
+			throw "WebGL Not Supported"
 		this.renderer = new THREE.WebGLRenderer();
-	else
+	} catch(e) {
 		this.renderer = new THREE.CanvasRenderer();
+	}
 
 	this.renderer.setSize(w, h);
 	this.renderer.setClearColor(0x000000, 1);
