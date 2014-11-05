@@ -2,6 +2,7 @@ var PT_SIZE = 0.25;
 var LINE_SIZE = 5;
 var PLANE_SIZE = 5;
 var LINE_WIDTH = 2;
+var PLANE_OPACITY = 0.5;
 
 var randomColour = (function() {
 	var n = 0;
@@ -50,6 +51,7 @@ function drawableModel(type, subtype, size, pts) {
 	self.subtype = ko.observable(subtype);
 	self.size = ko.observable(size);
 	self.colour = ko.observable(randomColour());
+	self.opacity = ko.observable(PLANE_OPACITY);
 	self.pts = pts;
 
 	self.geo = null;
@@ -73,8 +75,8 @@ function drawableModel(type, subtype, size, pts) {
 					color: self.colour(),
 					side: THREE.DoubleSide,
 					transparent: true,
-					opacity: 0.5,
-					depthWrite: false
+					opacity: self.opacity(),
+					depthWrite: (parseFloat(self.opacity()) === 1.0)
 				});
 		}
 	});

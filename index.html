@@ -26,6 +26,10 @@
 	<script type="text/html" id="size-template">
 		<input type=range min=0 max=20 step=1 data-bind="textInput: size" />
 	</script>
+	<script type="text/html" id="opacity-template">
+		<input type=range min=0 max=1 step=0.05 data-bind="textInput: opacity" />
+	</script>
+
 
 	<script type="text/html" id="item-template-point">
 		<div data-bind="if: collapse">
@@ -82,6 +86,7 @@
 			<p>Direction 2:</p>
 			<div data-bind="template: { name: 'pt-template', data: pts.d2 }"></div>
 			<p>Size: <span data-bind="template: {name: 'size-template'}"></span></p>
+			<p>Opacity: <span data-bind="template: {name: 'opacity-template'}"></span></p>
 		</div>
 		<div data-bind="if: collapse">
 			r =
@@ -98,6 +103,7 @@
 			<p>Normal:</p>
 			<div data-bind="template: { name: 'pt-template', data: pts.n }"></div>
 			<p>Size: <span data-bind="template: {name: 'size-template'}"></span></p>
+			<p>Opacity: <span data-bind="template: {name: 'opacity-template'}"></span></p>
 		</div>
 		<div data-bind="if: collapse">
 			<span data-bind="template: {name: 'pt-template-summary', data: pts.n}"></span> &middot;
