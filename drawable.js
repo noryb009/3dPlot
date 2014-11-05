@@ -1,6 +1,7 @@
 var PT_SIZE = 0.25;
 var LINE_SIZE = 5;
 var PLANE_SIZE = 5;
+var LINE_WIDTH = 2;
 
 var randomColour = (function() {
 	var n = 0;
@@ -62,7 +63,10 @@ function drawableModel(type, subtype, size, pts) {
 		switch(self.type()) {
 			case 'point':
 			case 'line':
-				return new THREE.LineBasicMaterial({color: self.colour()});
+				return new THREE.LineBasicMaterial({
+					color: self.colour(),
+					linewidth: LINE_WIDTH
+				});
 				break;
 			case 'plane':
 				return new THREE.MeshBasicMaterial({
