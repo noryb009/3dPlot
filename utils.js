@@ -85,57 +85,45 @@ ThreeJSUtils.prototype.removeMesh = function(m) {
 	}
 };
 
-ThreeJSUtils.prototype.axisPositions = function() {
-	"use strict";
-	var posns = [
-		[new THREE.Vector3(-AXIS_SIZE, 0, 0),
-		 new THREE.Vector3( AXIS_SIZE, 0, 0),],
-		[new THREE.Vector3(0, -AXIS_SIZE, 0),
-		 new THREE.Vector3(0,  AXIS_SIZE, 0),],
-		[new THREE.Vector3(0, 0, -AXIS_SIZE),
-		 new THREE.Vector3(0, 0,  AXIS_SIZE),],
-	];
+ThreeJSUtils.prototype.createAxis = function(x, y, z, colour, dashed) {
+	var geo = new THREE.Geometry();
+	var mat;
 
-	for(var i = -AXIS_SIZE; i <= AXIS_SIZE; i += AXIS_TICK_SPACING) {
-		if(i === 0) continue;
-		posns[0].push(
-			new THREE.Vector3(i, 0, -AXIS_TICK_SIZE),
-			new THREE.Vector3(i, 0,  AXIS_TICK_SIZE)
-		);
-		posns[1].push(
-			new THREE.Vector3(-AXIS_TICK_SIZE, i, 0),
-			new THREE.Vector3( AXIS_TICK_SIZE, i, 0)
-		);
-		posns[2].push(
-			new THREE.Vector3(-AXIS_TICK_SIZE, 0, i),
-			new THREE.Vector3( AXIS_TICK_SIZE, 0, i)
-		);
+	if(dashed) {
+		mat = new THREE.LineDashedMaterial({
+			dashSize: 0.5,
+			gapSize:  0.5,
+		});
+	} else {
+		mat = new THREE.LineBasicMaterial();
 	}
-	return posns;
-};
+	mat.setValues({
+		color: colour,
+		transparent: true,
+		opacity: 0.5,
+		depthWrite: false,
+	});
 
+	geo.vertices = [
+		new THREE.Vector3(0,0,0),
+		new THREE.Vector3(x,y,z),
+	];
+	geo.computeLineDistances();
+
+	return new THREE.Line(geo, mat, THREE.LinePieces);
+};
 
 ThreeJSUtils.prototype.addAxis = function() {
 	"use strict";
-	var axisGeo = [new THREE.Geometry(), new THREE.Geometry(), new THREE.Geometry()];
-	var posns = this.axisPositions();
-	axisGeo[0].vertices = posns[0];
-	axisGeo[1].vertices = posns[1];
-	axisGeo[2].vertices = posns[2];
-	var xMat = new THREE.LineBasicMaterial({
-		color: 0xff0000,
-		transparent: true,
-		opacity: 0.5,
-		depthWrite: false
-	});
-	var yMat = xMat.clone();
-	var zMat = xMat.clone();
-	yMat.setValues({color: 0x00ff00});
-	zMat.setValues({color: 0x0000ff});
+	var axisObj = new THREE.Object3D();
+	axisObj.add(this.createAxis( AXIS_SIZE,0,0, 0xff0000, false));
+	axisObj.add(this.createAxis(-AXIS_SIZE,0,0, 0xff0000, true));
+	axisObj.add(this.createAxis(0, AXIS_SIZE,0, 0x00ff00, false));
+	axisObj.add(this.createAxis(0,-AXIS_SIZE,0, 0x00ff00, true));
+	axisObj.add(this.createAxis(0,0, AXIS_SIZE, 0x0000ff, false));
+	axisObj.add(this.createAxis(0,0,-AXIS_SIZE, 0x0000ff, true));
 
-	this.addMesh(new THREE.Line(axisGeo[0], xMat, THREE.LinePieces));
-	this.addMesh(new THREE.Line(axisGeo[1], yMat, THREE.LinePieces));
-	this.addMesh(new THREE.Line(axisGeo[2], zMat, THREE.LinePieces));
+	this.addMesh(axisObj);
 };
 
 var u = new ThreeJSUtils();

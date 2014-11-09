@@ -56,7 +56,7 @@ function drawableModel(type, subtype, size, pts) {
 
 	self.geo = null;
 	self.mesh = null;
-	
+
 	self.toggleCollapse = function() {
 		self.collapse(!self.collapse());
 	};
@@ -151,7 +151,7 @@ function drawableModel(type, subtype, size, pts) {
 
 		if(self.valid() === false)
 			return;
-		
+
 		switch(self.type()) {
 			case 'point':
 				self.makePoint();
@@ -191,7 +191,7 @@ function drawableModel(type, subtype, size, pts) {
 				return t+'plane';
 		}
 	});
-}	
+}
 
 function drawableModels(){
 	var self = this;
