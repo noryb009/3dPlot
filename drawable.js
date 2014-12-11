@@ -3,6 +3,7 @@ var LINE_SIZE = 5;
 var PLANE_SIZE = 5;
 var LINE_WIDTH = 2;
 var PLANE_OPACITY = 0.5;
+var ZERO_VECTOR = new THREE.Vector3(0,0,0);
 
 var randomColour = (function() {
 	var n = 0;
@@ -92,8 +93,12 @@ function drawableModel(type, subtype, size, pts) {
 
 	self.makePoint = function() {
 		self.geo = new THREE.Geometry();
+
 		self.geo.vertices =
 			self.linesAcrossPoint(self.pts.p.v());
+
+		if(self.subtype() === 'vector')
+			self.geo.vertices.push(self.pts.p.v(), ZERO_VECTOR);
 
 		self.mesh = new THREE.Line(self.geo, self.mat(), THREE.LinePieces);
 	};
@@ -197,8 +202,8 @@ function drawableModels(){
 	var self = this;
 	self.items = ko.observableArray();
 
-	self.addPoint = function() {
-		self.items.push(new drawableModel('point', '', PT_SIZE,
+	self.addPoint = function(subtype) {
+		self.items.push(new drawableModel('point', subtype, PT_SIZE,
 		{
 			p: new Vec()
 		}));
@@ -231,7 +236,10 @@ function drawableModels(){
 		var element = document.getElementById('add-select');
 		switch(element.value) {
 			case 'pt':
-				self.addPoint();
+				self.addPoint('');
+				break;
+			case 'pt-vector':
+				self.addPoint('vector');
 				break;
 			case 'line':
 				self.addLine('');
