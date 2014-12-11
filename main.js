@@ -5,8 +5,8 @@ var AXIS_TICK_SIZE = 0.5;
 var AXIS_TICK_SPACING = 1;
 
 window.onload = function() {
-	"use strict";
-	u.init();
-	u.addAxis();
-	u.render();
+    "use strict";
+    u.init();
+    u.addAxis();
+    u.render();
 };
