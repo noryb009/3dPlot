@@ -102,6 +102,7 @@ ThreeJSUtils.prototype.createAxis = function(x, y, z, colour, dashed) {
         transparent: true,
         opacity: 0.5,
         depthWrite: false,
+        linewidth: 2,
     });
 
     geo.vertices = [
